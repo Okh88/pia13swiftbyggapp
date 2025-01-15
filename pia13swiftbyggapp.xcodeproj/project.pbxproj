@@ -15,6 +15,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				Planering.pdf,
 			);
 			target = 7210E68E2D353EDA00FF2517 /* pia13swiftbyggapp */;
 		};

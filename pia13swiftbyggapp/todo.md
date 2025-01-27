@@ -34,3 +34,6 @@
 
 
 
+### TODO
+*Select store inte i mitten av skärm
+*Stang 

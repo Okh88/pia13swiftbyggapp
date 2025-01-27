@@ -9,86 +9,106 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
     @State var shopmodel = ShoppingModel()
-    
     @State var showList = true
     @State var showFav = false
-    @State var showShopDetail = false
-    @State var showShopSelect = true
-
+    @State var showShopdetail = false
+    @State var showShopSelect = false
+    
     var body: some View {
-        VStack{
-            HStack{
-                Button(showList ? "MAP" : "LIST"){
+        VStack {
+            HStack {
+                Button(showList ? "MAP" : "LIST") {
                     showList.toggle()
                 }
                 .padding(.leading)
                 
                 Spacer()
                 
-                Text("AFFÄR X")
-                Button("O"){
+                if shopmodel.currentStore != nil {
+                    Text(shopmodel.currentStore!.name)
+                }
+                
+                Button("O") {
                     showShopSelect.toggle()
                 }
                 
+                
                 Spacer()
                 
-                Button("FAV"){
+                Button("FAV") {
                     showFav.toggle()
                 }
+                .padding(.trailing)
                 
-                .padding(.horizontal)
             }
             .frame(height: 50)
             .frame(maxWidth: .infinity)
             .background(Color.yellow)
             
-            ZStack{
-                VStack{
-                    if showList{
-                        ShopListView(shopmodel
-                                     : shopmodel)
-                    }else{
+            
+            ZStack(alignment: .top) {
+                VStack {
+                    if showList {
+                        ShopListView(shopmodel: $shopmodel)
+                    } else {
                         ShopMapView()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            if showShopSelect{
-                VStack{
-                    HStack{
-                        Spacer()
-                        Button("+"){
-                            showShopDetail.toggle()
+                
+                if showShopSelect && showList {
+                    VStack {
+                        
+                        HStack {
+                            Spacer()
+                            Button("+") {
+                                showShopdetail.toggle()
+                            }
                         }
+                        .padding(.trailing)
+                        List {
+                            ForEach(shopmodel.storeitems) { storeitem in
+                                Text(storeitem.name)
+                                    .onTapGesture {
+                                        shopmodel.selectStore(store: storeitem)
+                                        
+                                        showShopSelect = false
+                                }
+                            }
+                        }
+                        .listStyle(.plain)
                     }
-                    .padding(.trailing)
-                    
-                    Button("Affär A"){
-                        showShopDetail.toggle()
-                    }
-                    Button("Affär B"){
-                        showShopDetail.toggle()
-                    }
+                    .frame(height: 200)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.cyan)
                 }
-                .frame(height: 100)
-                .frame(maxWidth: .infinity)
-                .background(Color.black)
-            }//VStack
-          }//ZStack
-        }//vstack
-        .fullScreenCover(isPresented: $showFav){
-            FavoriteView()
+                
+                
+            } // zstack
+            
+        } // vstack
+        .onAppear() {
+            shopmodel.modelContext = modelContext
+            shopmodel.loadStoreItems()
+            shopmodel.loadShopItems()
         }
-        .fullScreenCover(isPresented: $showShopDetail){
-            ShopDetailView()
+        .fullScreenCover(isPresented: $showFav) {
+            FavoriteView(shopmodel: $shopmodel)
+        }
+        .fullScreenCover(isPresented: $showShopdetail) {
+            ShopDetailView(shopmodel: $shopmodel)
         }
         
-    }//body
+        
+    } // body
+    
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: ShopItem.self, inMemory: true)
+        .modelContainer(for: [ShopItem.self, StoreItem.self], inMemory: true)
 }
 
 /*

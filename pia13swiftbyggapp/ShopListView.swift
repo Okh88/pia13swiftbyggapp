@@ -6,53 +6,64 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ShopListView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var shopitems: [ShopItem]
-    var shopmodel : ShoppingModel
+    
+    /*
+     @Query(filter: #Predicate<ShopItem> { shopitem in
+     shopitem.store!.name == "IKEA"
+     }) var shopitems: [ShopItem]
+     */
+    
+    @Binding var shopmodel : ShoppingModel
     @State var addshopName = ""
     @State var addshopAmount = ""
     var body: some View {
-        VStack{
-            HStack{
+        
+        VStack {
+            
+            HStack {
                 TextField("Name", text: $addshopName)
                 TextField("Amount", text: $addshopAmount)
-                    .padding(.trailing)
-
-                Button("Add"){
+                    .frame(width: 70)
+                
+                Button("Add") {
                     addShop()
                 }
             }
             .padding(.horizontal)
-            List{
-                ForEach(shopitems) { shopitem in
-                    ShopRowView(shopitems: shopitem)
+            
+            List {
+                ForEach(shopmodel.shopitems) { shopitem in
+                    ShopRowView(shopitem: shopitem, favItem: {
+                        shopmodel.favoriteItem(item: shopitem)
+                    }, delItem: {
+                        shopmodel.deleteItem(item: shopitem)
+                    }, addItem: {})
                 }
             }
-        }//vsatck
-    }//body
+        } // vstack
+    } // body
+    
     func addShop() {
         let addAmountNumber = Int(addshopAmount)
         
         if addAmountNumber == nil {
-            //Visa fel
+            // Visa fel
             return
         }
         if addshopName == "" {
-            //Visa fel
+            // Visa fel
             return
         }
+        shopmodel.addShop(shopname: addshopName, amount: addAmountNumber!)
         
-        let newItem = ShopItem( name: addshopName, amount: addAmountNumber!)
-        modelContext.insert(newItem)
         addshopName = ""
         addshopAmount = ""
     }
+    
 }
-#Preview {
-    ShopListView(shopmodel: ShoppingModel())
-        .modelContainer(for: ShopItem.self, inMemory: true)
 
+#Preview {
+    ShopListView(shopmodel: .constant(ShoppingModel()))
 }

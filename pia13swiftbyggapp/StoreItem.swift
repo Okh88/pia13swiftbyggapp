@@ -10,10 +10,14 @@ import SwiftData
 
 @Model
 final class StoreItem {
-    var name : String
+    @Relationship(deleteRule: .cascade, inverse: \ShopItem.store) var shopitems: [ShopItem] = []
     
-    init(name : String){
+    var name: String
+    
+    var posLat : Double?
+    var posLng : Double?
+
+    init(name: String) {
         self.name = name
-   
     }
 }

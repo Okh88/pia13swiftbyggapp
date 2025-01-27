@@ -10,11 +10,17 @@ import SwiftData
 
 @Model
 final class ShopItem {
-    var name : String
-    var amount : Int
-    var done : Bool = false
     
-    init(name : String, amount : Int){
+    var store : StoreItem?
+    
+    var name: String
+    var amount: Int
+    var done: Bool = false
+    
+    var favorite: Bool = false
+
+    
+    init(name: String, amount : Int) {
         self.name = name
         self.amount = amount
     }

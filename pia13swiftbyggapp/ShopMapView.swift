@@ -16,3 +16,4 @@ struct ShopMapView: View {
 #Preview {
     ShopMapView()
 }
+

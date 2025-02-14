@@ -30,26 +30,26 @@ struct ShopDetailView: View {
             Text("SHOP DETAIL")
 
             TextField("Shop Name", text: $shopname)
-                
-                Button("Save") {
-                    saveStore()
-                    dismiss()
-                }
-            }
-            .onAppear() {
-                if storeitem != nil {
-                    shopname = storeitem!.name
-                }
+            
+            Button("Save") {
+                saveStore()
+                dismiss()
             }
         }
-        
-        func saveStore() {
-            
-            shopmodel.saveStore(storename: shopname, storeitem: storeitem)
-            
+        .onAppear() {
+            if storeitem != nil {
+                shopname = storeitem!.name
+            }
         }
     }
     
-    #Preview {
-        ShopDetailView(shopmodel: .constant(ShoppingModel()))
+    func saveStore() {
+        
+        shopmodel.saveStore(storename: shopname, storeitem: storeitem)
+        
     }
+}
+
+#Preview {
+    ShopDetailView(shopmodel: .constant(ShoppingModel()))
+}

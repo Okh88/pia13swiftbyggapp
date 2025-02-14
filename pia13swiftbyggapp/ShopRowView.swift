@@ -10,25 +10,29 @@ import SwiftUI
 struct ShopRowView: View {
     
     var shopitem : ShopItem
+    
     var favItem : () -> Void
     var delItem : () -> Void
     var addItem : () -> Void
     
     var body: some View {
-        VStack{
-            HStack{
+        VStack {
+            HStack {
                 Spacer()
+                
                 if shopitem.favorite == false {
                     Text("F")
                         .onTapGesture {
                             favItem()
                         }
                 }
+                
                 Text("D")
                     .onTapGesture {
                         delItem()
                     }
                     .padding(.trailing)
+                
                 if shopitem.favorite == true {
                     Text("ADD")
                         .onTapGesture {
@@ -36,6 +40,7 @@ struct ShopRowView: View {
                         }
                         .padding(.trailing)
                 }
+                
             }
             HStack {
                 Text(shopitem.name)
@@ -45,6 +50,7 @@ struct ShopRowView: View {
                 } else {
                     Text(shopitem.store!.name)
                 }
+                
                 Spacer()
                 
                 if shopitem.favorite == false {

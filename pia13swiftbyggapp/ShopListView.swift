@@ -10,14 +10,16 @@ import SwiftUI
 struct ShopListView: View {
     
     /*
-     @Query(filter: #Predicate<ShopItem> { shopitem in
-     shopitem.store!.name == "IKEA"
-     }) var shopitems: [ShopItem]
-     */
-    
+    @Query(filter: #Predicate<ShopItem> { shopitem in
+        shopitem.store!.name == "IKEA"
+    }) var shopitems: [ShopItem]
+    */
+        
     @Binding var shopmodel : ShoppingModel
+    
     @State var addshopName = ""
     @State var addshopAmount = ""
+
     var body: some View {
         
         VStack {
@@ -56,6 +58,7 @@ struct ShopListView: View {
             // Visa fel
             return
         }
+        
         shopmodel.addShop(shopname: addshopName, amount: addAmountNumber!)
         
         addshopName = ""

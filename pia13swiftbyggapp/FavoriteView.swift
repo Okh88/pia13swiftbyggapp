@@ -10,16 +10,21 @@ import SwiftUI
 struct FavoriteView: View {
     
     @Environment(\.dismiss) var dismiss
+    
     @Binding var shopmodel : ShoppingModel
     
     var body: some View {
-        VStack{
+        VStack {
+            
             Button(action: {
                 dismiss()
             }) {
                 Image(systemName: "xmark")
             }
+
             Text("FAVORITE")
+
+            
             List {
                 ForEach(shopmodel.favitems) { shopitem in
                     ShopRowView(shopitem: shopitem, favItem: {}, delItem: {

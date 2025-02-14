@@ -15,14 +15,14 @@ import SwiftData
     var storeitems : [StoreItem] = []
     var shopitems : [ShopItem] = []
     var favitems : [ShopItem] = []
-    
+
     var currentStore : StoreItem?
     
     /*
-     init(modelContext: ModelContext) {
-     self.modelContext = modelContext
-     }
-     */
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    */
     
     func loadShopItems() {
         let currshopid = currentStore!.id
@@ -37,6 +37,7 @@ import SwiftData
             
         }
     }
+    
     func loadFavorites() {
         do {
             let fetchDescriptor = FetchDescriptor<ShopItem>(predicate: #Predicate { sitem in
@@ -49,7 +50,6 @@ import SwiftData
         }
     }
     
-    
     func loadStoreItems() {
         do {
             let fetchDescriptor = FetchDescriptor<StoreItem>(sortBy: [SortDescriptor(\.name)])
@@ -60,7 +60,7 @@ import SwiftData
                 modelContext!.insert(newStore)
                 currentStore = newStore
                 storeitems = try modelContext!.fetch(fetchDescriptor)
-                
+
             } else {
                 storeitems = savedstores
                 currentStore = savedstores.first
@@ -88,8 +88,9 @@ import SwiftData
             modelContext!.insert(storeitem!)
         }
         loadStoreItems()
-        
+
     }
+
     func addShop(favitem : ShopItem) {
         let newShopitem = ShopItem(name: favitem.name, amount: favitem.amount)
         newShopitem.store = currentStore
@@ -103,7 +104,7 @@ import SwiftData
         modelContext!.insert(newShopitem)
         loadShopItems()
     }
-    
+
     func favoriteItem(item : ShopItem) {
         let newShopitem = ShopItem(name: item.name, amount: item.amount)
         newShopitem.favorite = true
@@ -115,5 +116,7 @@ import SwiftData
         modelContext!.delete(item)
         loadShopItems()
     }
+    
+    
     
 }
